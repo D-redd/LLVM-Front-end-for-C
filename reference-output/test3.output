@@ -1,0 +1,364 @@
+make -C src
+make[1]: Entering directory '/home/bnitulescu/CHWD/reference/a3-c-to-llvm-front-end/src'
+make[1]: 'compiler' is up to date.
+make[1]: Leaving directory '/home/bnitulescu/CHWD/reference/a3-c-to-llvm-front-end/src'
+make -C test TEST_ARGS=1 TEST_LOCALS=1
+make[1]: Entering directory '/home/bnitulescu/CHWD/reference/a3-c-to-llvm-front-end/test'
+gcc -o testgcc -DTEST_ARGS=1 -DTEST_LOCALS=1 testbasic.c  testfunc.c testlocals.c testmain.c
+./testgcc > testgcc.result
+
+=== TEST GCC ===
+
+pi100() : 314
+e1000() : 2718
+ref17k() : 17460
+circleArea100(3) : 2826
+mac(-4,2,7) : 10
+f(-4,2,5) : 84
+pnd(3,8,40,-3) : -1800
+rcubed(-29) : -24389
+volume(3142,5,10): 785500
+Taylor_1_div_x(4): -20
+xx(4,2,5,-1) : 220
+deepExp(-10,-14,-12,-18) : 816
+scalarProd_3d(3,4,5,-5,-4,3) : -16
+point_cross_diff(3,4,5,-5,-4,3) : 32
+det3(1,1,-2,1,-2,1,-2,1,1) : 0
+Taylor_1_div_x_v2(4): -20
+mdet3(1,1,-2,1,-2,1,-2,1,1) : 0
+fibo7() : 13
+deepExp2(-10,-14,-12,-18,10,12) : -14
+
+../src/compiler testbasic.c
+../src/compiler testfunc.c
+../src/compiler testlocals.c
+
+=== GENERATED CODE ===
+
+; ModuleID = 'testbasic.ll'
+source_filename = "testbasic.ll"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+define i32 @pi100() {
+  ret i32 314
+}
+
+define i32 @e1000() {
+  ret i32 2718
+}
+
+define i32 @ref17k() {
+  ret i32 17460
+}
+; ModuleID = 'testfunc.ll'
+source_filename = "testfunc.ll"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+define i32 @circleArea100(i32 %radius) {
+  %1 = mul i32 %radius, %radius
+  %2 = mul i32 314, %1
+  ret i32 %2
+}
+
+define i32 @mac(i32 %a, i32 %b, i32 %c) {
+  %1 = mul i32 %b, %c
+  %2 = add i32 %a, %1
+  ret i32 %2
+}
+
+define i32 @f(i32 %a, i32 %b, i32 %c) {
+  %1 = mul i32 %b, %b
+  %2 = mul i32 %a, %c
+  %3 = mul i32 4, %2
+  %4 = sub i32 %1, %3
+  ret i32 %4
+}
+
+define i32 @pnd(i32 %n1, i32 %n2, i32 %p, i32 %Multiplier) {
+  %1 = mul i32 %n1, %p
+  %2 = sub i32 100, %p
+  %3 = mul i32 %n2, %2
+  %4 = add i32 %1, %3
+  %5 = mul i32 %Multiplier, %4
+  ret i32 %5
+}
+
+define i32 @rcubed(i32 %return2) {
+  %1 = mul i32 %return2, %return2
+  %2 = mul i32 %return2, %1
+  ret i32 %2
+}
+
+define i32 @volume(i32 %pi, i32 %r, i32 %height) {
+  %1 = mul i32 %r, %r
+  %2 = mul i32 %1, %height
+  %3 = mul i32 %pi, %2
+  ret i32 %3
+}
+
+define i32 @Taylor_1_div_x(i32 %x) {
+  %1 = sub i32 %x, 1
+  %2 = sub i32 1, %1
+  %3 = sub i32 %x, 1
+  %4 = sub i32 %x, 1
+  %5 = mul i32 %3, %4
+  %6 = add i32 %2, %5
+  %7 = sub i32 %x, 1
+  %8 = sub i32 %x, 1
+  %9 = sub i32 %x, 1
+  %10 = mul i32 %8, %9
+  %11 = mul i32 %7, %10
+  %12 = sub i32 %6, %11
+  ret i32 %12
+}
+
+define i32 @xx(i32 %a, i32 %b, i32 %c, i32 %d) {
+  %1 = sub i32 %d, %a
+  %2 = mul i32 %1, 0
+  %3 = sub i32 %a, %b
+  %4 = mul i32 %3, 10
+  %5 = sub i32 %b, %c
+  %6 = mul i32 %5, 20
+  %7 = sub i32 %c, %d
+  %8 = mul i32 %7, 30
+  %9 = sub i32 %6, %8
+  %10 = add i32 %4, %9
+  %11 = sub i32 %2, %10
+  ret i32 %11
+}
+
+define i32 @deepExp(i32 %x, i32 %y, i32 %z, i32 %t) {
+  %1 = mul i32 %x, 1
+  %2 = mul i32 %y, 2
+  %3 = mul i32 %z, 3
+  %4 = mul i32 %t, 4
+  %5 = mul i32 %x, 11
+  %6 = mul i32 %y, 12
+  %7 = mul i32 %z, 13
+  %8 = mul i32 %t, 14
+  %9 = mul i32 %x, 21
+  %10 = mul i32 %y, 22
+  %11 = mul i32 %z, 23
+  %12 = mul i32 %t, 24
+  %13 = mul i32 %x, 31
+  %14 = mul i32 %y, 32
+  %15 = mul i32 %z, 33
+  %16 = mul i32 %t, 34
+  %17 = sub i32 %15, %16
+  %18 = sub i32 %14, %17
+  %19 = sub i32 %13, %18
+  %20 = sub i32 %12, %19
+  %21 = sub i32 %11, %20
+  %22 = sub i32 %10, %21
+  %23 = sub i32 %9, %22
+  %24 = sub i32 %8, %23
+  %25 = sub i32 %7, %24
+  %26 = sub i32 %6, %25
+  %27 = sub i32 %5, %26
+  %28 = sub i32 %4, %27
+  %29 = sub i32 %3, %28
+  %30 = sub i32 %2, %29
+  %31 = sub i32 %1, %30
+  ret i32 %31
+}
+
+define i32 @scalarProd_3d(i32 %x1, i32 %y1, i32 %z1, i32 %x2, i32 %y2, i32 %z2) {
+  %1 = mul i32 %x1, %x2
+  %2 = mul i32 %y1, %y2
+  %3 = add i32 %1, %2
+  %4 = mul i32 %z1, %z2
+  %5 = add i32 %3, %4
+  ret i32 %5
+}
+
+define i32 @point_cross_diff(i32 %x1, i32 %y1, i32 %z1, i32 %x2, i32 %y2, i32 %z2) {
+  %1 = mul i32 %y1, %z2
+  %2 = mul i32 %z1, %y2
+  %3 = sub i32 %1, %2
+  ret i32 %3
+}
+
+define i32 @det3(i32 %a11, i32 %a12, i32 %a13, i32 %a21, i32 %a22, i32 %a23, i32 %a31, i32 %a32, i32 %a33) {
+  %1 = mul i32 %a22, %a33
+  %2 = mul i32 %a23, %a32
+  %3 = sub i32 %1, %2
+  %4 = mul i32 %a11, %3
+  %5 = mul i32 %a21, %a33
+  %6 = mul i32 %a23, %a31
+  %7 = sub i32 %5, %6
+  %8 = mul i32 %a12, %7
+  %9 = sub i32 %4, %8
+  %10 = mul i32 %a21, %a32
+  %11 = mul i32 %a22, %a31
+  %12 = sub i32 %10, %11
+  %13 = mul i32 %a13, %12
+  %14 = add i32 %9, %13
+  ret i32 %14
+}
+; ModuleID = 'testlocals.ll'
+source_filename = "testlocals.ll"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+define i32 @Taylor_1_div_x_v2(i32 %x) {
+  %1 = alloca i32, align 4
+  %2 = sub i32 %x, 1
+  store i32 %2, i32* %1, align 4
+  %3 = load i32, i32* %1, align 4
+  %4 = sub i32 1, %3
+  %5 = load i32, i32* %1, align 4
+  %6 = load i32, i32* %1, align 4
+  %7 = mul i32 %5, %6
+  %8 = add i32 %4, %7
+  %9 = load i32, i32* %1, align 4
+  %10 = load i32, i32* %1, align 4
+  %11 = load i32, i32* %1, align 4
+  %12 = mul i32 %10, %11
+  %13 = mul i32 %9, %12
+  %14 = sub i32 %8, %13
+  ret i32 %14
+}
+
+define i32 @mdet3(i32 %a11, i32 %a12, i32 %a13, i32 %a21, i32 %a22, i32 %a23, i32 %a31, i32 %a32, i32 %a33) {
+  %1 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  %3 = alloca i32, align 4
+  %4 = mul i32 %a22, %a33
+  %5 = mul i32 %a23, %a32
+  %6 = sub i32 %4, %5
+  store i32 %6, i32* %1, align 4
+  %7 = mul i32 %a21, %a33
+  %8 = mul i32 %a23, %a31
+  %9 = sub i32 %7, %8
+  store i32 %9, i32* %2, align 4
+  %10 = mul i32 %a21, %a32
+  %11 = mul i32 %a22, %a31
+  %12 = sub i32 %10, %11
+  store i32 %12, i32* %3, align 4
+  %13 = load i32, i32* %1, align 4
+  %14 = mul i32 %a11, %13
+  %15 = load i32, i32* %2, align 4
+  %16 = mul i32 %a12, %15
+  %17 = sub i32 %14, %16
+  %18 = load i32, i32* %3, align 4
+  %19 = mul i32 %a13, %18
+  %20 = add i32 %17, %19
+  ret i32 %20
+}
+
+define i32 @fibo7() {
+  %1 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  store i32 1, i32* %1, align 4
+  store i32 1, i32* %2, align 4
+  %3 = load i32, i32* %1, align 4
+  %4 = load i32, i32* %2, align 4
+  %5 = add i32 %3, %4
+  store i32 %5, i32* %1, align 4
+  %6 = load i32, i32* %1, align 4
+  %7 = load i32, i32* %2, align 4
+  %8 = add i32 %6, %7
+  store i32 %8, i32* %2, align 4
+  %9 = load i32, i32* %1, align 4
+  %10 = load i32, i32* %2, align 4
+  %11 = add i32 %9, %10
+  store i32 %11, i32* %1, align 4
+  %12 = load i32, i32* %1, align 4
+  %13 = load i32, i32* %2, align 4
+  %14 = add i32 %12, %13
+  store i32 %14, i32* %2, align 4
+  %15 = load i32, i32* %1, align 4
+  %16 = load i32, i32* %2, align 4
+  %17 = add i32 %15, %16
+  ret i32 %17
+}
+
+define i32 @deepExp2(i32 %x, i32 %y, i32 %z, i32 %t, i32 %q, i32 %r) {
+  %1 = alloca i32, align 4
+  %2 = alloca i32, align 4
+  %3 = alloca i32, align 4
+  %4 = sub i32 %x, %y
+  store i32 %4, i32* %1, align 4
+  %5 = sub i32 %z, %t
+  store i32 %5, i32* %2, align 4
+  %6 = sub i32 %q, %r
+  store i32 %6, i32* %3, align 4
+  %7 = mul i32 %x, 1
+  %8 = mul i32 %y, 2
+  %9 = mul i32 %z, 3
+  %10 = mul i32 %t, 4
+  %11 = mul i32 %q, 11
+  %12 = mul i32 %r, 12
+  %13 = load i32, i32* %1, align 4
+  %14 = mul i32 %13, 13
+  %15 = load i32, i32* %2, align 4
+  %16 = mul i32 %15, 14
+  %17 = load i32, i32* %3, align 4
+  %18 = mul i32 %17, 21
+  %19 = mul i32 %x, 22
+  %20 = mul i32 %y, 23
+  %21 = mul i32 %z, 24
+  %22 = mul i32 %q, 31
+  %23 = mul i32 %r, 32
+  %24 = load i32, i32* %1, align 4
+  %25 = mul i32 %24, 33
+  %26 = load i32, i32* %2, align 4
+  %27 = mul i32 %26, 34
+  %28 = sub i32 %25, %27
+  %29 = sub i32 %23, %28
+  %30 = sub i32 %22, %29
+  %31 = sub i32 %21, %30
+  %32 = sub i32 %20, %31
+  %33 = sub i32 %19, %32
+  %34 = sub i32 %18, %33
+  %35 = sub i32 %16, %34
+  %36 = sub i32 %14, %35
+  %37 = sub i32 %12, %36
+  %38 = sub i32 %11, %37
+  %39 = sub i32 %10, %38
+  %40 = sub i32 %9, %39
+  %41 = sub i32 %8, %40
+  %42 = sub i32 %7, %41
+  ret i32 %42
+}
+
+llc testbasic.ll
+llc testfunc.ll
+llc testlocals.ll
+gcc -o testcompiler -DTEST_ARGS=1 -DTEST_LOCALS=1 testbasic.s testfunc.s testlocals.s testmain.c
+./testcompiler > testcompiler.result
+
+=== TEST COMPILER ===
+
+pi100() : 314
+e1000() : 2718
+ref17k() : 17460
+circleArea100(3) : 2826
+mac(-4,2,7) : 10
+f(-4,2,5) : 84
+pnd(3,8,40,-3) : -1800
+rcubed(-29) : -24389
+volume(3142,5,10): 785500
+Taylor_1_div_x(4): -20
+xx(4,2,5,-1) : 220
+deepExp(-10,-14,-12,-18) : 816
+scalarProd_3d(3,4,5,-5,-4,3) : -16
+point_cross_diff(3,4,5,-5,-4,3) : 32
+det3(1,1,-2,1,-2,1,-2,1,1) : 0
+Taylor_1_div_x_v2(4): -20
+mdet3(1,1,-2,1,-2,1,-2,1,1) : 0
+fibo7() : 13
+deepExp2(-10,-14,-12,-18,10,12) : -14
+
+PASSED
+
+=== ERROR TESTING ===
+../src/compiler err_duplicateargs.c
+err_duplicateargs.c:1: error: Argument 'ax' is specified twice
+../src/compiler err_missingsymbol.c
+err_missingsymbol.c:4: error: Symbol 'A' not found
+../src/compiler err_missingvariable.c
+err_missingvariable.c:3: error: Variable 'Z' not found
+make[1]: Leaving directory '/home/bnitulescu/CHWD/reference/a3-c-to-llvm-front-end/test'

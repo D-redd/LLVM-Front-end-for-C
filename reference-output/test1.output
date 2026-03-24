@@ -1,0 +1,50 @@
+make -C src
+make[1]: Entering directory '/home/bnitulescu/CHWD/reference/a3-c-to-llvm-front-end/src'
+make[1]: 'compiler' is up to date.
+make[1]: Leaving directory '/home/bnitulescu/CHWD/reference/a3-c-to-llvm-front-end/src'
+make -C test
+make[1]: Entering directory '/home/bnitulescu/CHWD/reference/a3-c-to-llvm-front-end/test'
+gcc -o testgcc -DTEST_ARGS=0 -DTEST_LOCALS=0 testbasic.c  testmain.c
+./testgcc > testgcc.result
+
+=== TEST GCC ===
+
+pi100() : 314
+e1000() : 2718
+ref17k() : 17460
+
+../src/compiler testbasic.c
+
+=== GENERATED CODE ===
+
+; ModuleID = 'testbasic.ll'
+source_filename = "testbasic.ll"
+target datalayout = "e-m:e-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+define i32 @pi100() {
+  ret i32 314
+}
+
+define i32 @e1000() {
+  ret i32 2718
+}
+
+define i32 @ref17k() {
+  ret i32 17460
+}
+
+llc testbasic.ll
+gcc -o testcompiler -DTEST_ARGS=0 -DTEST_LOCALS=0 testbasic.s testmain.c
+./testcompiler > testcompiler.result
+
+=== TEST COMPILER ===
+
+pi100() : 314
+e1000() : 2718
+ref17k() : 17460
+
+PASSED
+
+=== ERROR TESTING ===
+make[1]: Leaving directory '/home/bnitulescu/CHWD/reference/a3-c-to-llvm-front-end/test'
